@@ -1,0 +1,17 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "description": "Server Back TP1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Noah Lefevre",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "db": "^6.0.3",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0"
+  }
+}
