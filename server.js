@@ -58,7 +58,7 @@ app.use('/TP1', loginRoute);
 app.use('/TP1', registerRoute);
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join('/var/www/html/ProjetTP1', 'index.html'));
+    res.sendFile(path.join('/var/www/html/', 'index.html'));
 });
 
 // Middleware de gestion d'erreurs
