@@ -1,8 +1,3 @@
-# Ignorer les fichiers de logs
-*.log
-
-# Ignorer le dossier node_modules
 node_modules/
-
-# Ignorer les fichiers temporaires
-*.tmp
+.gitignore
+.env

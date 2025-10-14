@@ -12,13 +12,13 @@ const port = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('/var/www/html/ProjetTP1'));
+app.use(express.static('/var/www/html/'));
 
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'p1pkj',
-    password: process.env.DB_PASSWORD || 'av0bKmjH6a7iuHx7',
-    database: process.env.DB_NAME || 'TP1',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 });
 
 db.connect(err => {
