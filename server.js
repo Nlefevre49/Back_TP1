@@ -13,11 +13,9 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(express.static('/var/www/html/ProjetTP1'));
 
-// Connexion à la base de données
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'p1pkj',
@@ -33,7 +31,6 @@ db.connect(err => {
   }
 });
 
-
 const Utilisateur = {
   verifierIdentifiants: (login, password, callback) => {
     const sql = 'SELECT * FROM Utilisateur WHERE Login = ? AND Password = ?';
@@ -45,9 +42,15 @@ const Utilisateur = {
         callback(null, null);
       }
     });
+  },
+  inscription: (login, password, callback) => {
+    const sql = 'INSERT INTO Utilisateur (Login, Password) VALUES (?, ?)';
+    db.query(sql, [login, password], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results.insertId);
+    });
   }
 };
-
 
 const loginRoute = require('./TP1/Utilisateur')(db, Utilisateur);
 app.use('/TP1', loginRoute);
