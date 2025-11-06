@@ -60,7 +60,6 @@ const Utilisateur = {
 };
 
 
-// CORRECTION : Les fichiers sont dans le même dossier, donc utiliser './'
 const loginRoute = require('./Utilisateur')(db, Utilisateur);
 const registerRoute = require('./Inscription')(db, Utilisateur);
 
@@ -71,7 +70,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join('/var/www/html/', 'index.html'));
 });
 
-// Middleware de gestion d'erreurs
 app.use((err, req, res, next) => {
     console.error('Erreur serveur:', err);
     res.status(500).json({ success: false, message: 'Erreur serveur interne' });
