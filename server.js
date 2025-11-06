@@ -3,6 +3,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 const mysql = require('mysql');
+const bcrypt = require('bcryptjs');
+const SALT_ROUNDS = 12;
 
 dotenv.config();
 
@@ -31,24 +33,32 @@ db.connect(err => {
 
 const Utilisateur = {
     verifierIdentifiants: (login, password, callback) => {
-        const sql = 'SELECT * FROM Utilisateur WHERE Login = ? AND Password = ?';
-        db.query(sql, [login, password], (err, results) => {
+        const sql = 'SELECT * FROM Utilisateur WHERE Login = ? LIMIT 1';
+        db.query(sql, [login], (err, results) => {
             if (err) return callback(err, null);
-            if (results.length > 0) {
-                callback(null, results[0]);
-            } else {
-                callback(null, null);
-            }
+            if (results.length === 0) return callback(null, null);
+
+            const user = results[0];
+            bcrypt.compare(password, user.Password, (cmpErr, ok) => {
+                if (cmpErr) return callback(cmpErr, null);
+                if (!ok) return callback(null, null);
+                callback(null, user);
+            });
         });
     },
+
     inscription: (login, password, callback) => {
-        const sql = 'INSERT INTO Utilisateur (Login, Password) VALUES (?, ?)';
-        db.query(sql, [login, password], (err, results) => {
-            if (err) return callback(err, null);
-            callback(null, results.insertId);
+        bcrypt.hash(password, SALT_ROUNDS, (hashErr, hash) => {
+            if (hashErr) return callback(hashErr, null);
+            const sql = 'INSERT INTO Utilisateur (Login, Password) VALUES (?, ?)';
+            db.query(sql, [login, hash], (err, results) => {
+                if (err) return callback(err, null);
+                callback(null, results.insertId);
+            });
         });
     },
 };
+
 
 // CORRECTION : Les fichiers sont dans le même dossier, donc utiliser './'
 const loginRoute = require('./Utilisateur')(db, Utilisateur);
